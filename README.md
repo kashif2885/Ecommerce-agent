@@ -1,6 +1,6 @@
 # Adoob AI Assistant
 
-A full-stack conversational AI agent for **Adoob** — an IT & electronics e-commerce store. Built as a technical assessment using LangGraph, FastAPI, ChromaDB, and the OpenAI API.
+A conversational AI agent for **Adoob** — an IT & electronics e-commerce store. Built as a technical assessment using LangGraph, FastAPI, ChromaDB, and the OpenAI API.
 
 ---
 
@@ -9,7 +9,6 @@ A full-stack conversational AI agent for **Adoob** — an IT & electronics e-com
 - **Pure ReAct agent** (LangGraph) — the LLM reasons over all tools simultaneously; rich tool descriptions guide routing without a separate intent classifier
 - **Streaming responses** — tokens stream to the browser in real time via Server-Sent Events (SSE)
 - **Tool trace panel** — every tool call (name, input, output) is shown live in a side panel
-- **Multi-turn conversation** — in-memory session store preserves message history per session
 - **RAG knowledge base** — `Adoob_FAQ.pdf` is ingested at startup into ChromaDB; the agent retrieves relevant chunks to answer policy/store questions
 - **Calendar booking** — fully mock in-memory appointment system with timezone-aware past-date validation (Asia/Riyadh)
 - **Product catalog** — 10 IT products across 9 categories with search, detail lookup, and side-by-side comparison
