@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adoob – Products</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header .logo { font-size: 20px; font-weight: 700; color: #60a5fa; letter-spacing: -0.5px; }
+    header nav { margin-left: auto; display: flex; gap: 8px; }
+    header nav a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all .15s;
+    }
+    header nav a:hover  { color: #e2e8f0; border-color: #334155; }
+    header nav a.active { color: #60a5fa; border-color: #1d4ed8; background: #1e3a5f; }
+
+    /* ── Page wrapper ── */
+    .page { max-width: 1280px; margin: 0 auto; padding: 32px 24px; }
+
+    /* ── Controls bar ── */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+    .controls h1 { font-size: 22px; font-weight: 700; color: #f1f5f9; flex: 1; }
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 0 12px;
+      gap: 8px;
+      flex: 0 0 280px;
+    }
+    .search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #e2e8f0;
+      font-size: 13px;
+      padding: 9px 0;
+      width: 100%;
+    }
+    .search-box input::placeholder { color: #475569; }
+    .search-icon { color: #475569; font-size: 14px; }
+    select {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-size: 13px;
+      padding: 9px 14px;
+      outline: none;
+      cursor: pointer;
+    }
+    select:focus { border-color: #3b82f6; }
+    #countLabel { font-size: 13px; color: #64748b; }
+
+    /* ── Product grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Product card ── */
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color .15s, transform .15s;
+      cursor: pointer;
+    }
+    .card:hover { border-color: #3b82f6; transform: translateY(-2px); }
+
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* category colour map */
+    .cat-Laptops     { background: #1e3a5f; color: #60a5fa; }
+    .cat-Audio       { background: #2e1a47; color: #a78bfa; }
+    .cat-Gaming      { background: #1a2e1a; color: #4ade80; }
+    .cat-Cameras     { background: #2e1a1a; color: #f87171; }
+    .cat-SmartHome   { background: #1e2a3a; color: #38bdf8; }
+    .cat-Office      { background: #2a2a1a; color: #facc15; }
+    .cat-Wearables   { background: #1e1e2a; color: #c084fc; }
+    .cat-Storage     { background: #1a2e2e; color: #2dd4bf; }
+    .cat-Peripherals { background: #2e1e1a; color: #fb923c; }
+
+    .card-id { font-size: 11px; color: #475569; font-family: monospace; }
+    .card-name { font-size: 15px; font-weight: 700; color: #f1f5f9; line-height: 1.3; }
+    .card-brand { font-size: 12px; color: #64748b; }
+    .card-desc { font-size: 12px; color: #94a3b8; line-height: 1.5; flex: 1; }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-top: 1px solid #334155;
+      padding-top: 12px;
+    }
+    .price { font-size: 18px; font-weight: 700; color: #60a5fa; }
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: #fbbf24;
+    }
+    .stock { font-size: 11px; color: #64748b; }
+
+    /* ── Specs panel (expandable) ── */
+    .specs-toggle {
+      font-size: 12px;
+      color: #3b82f6;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      text-align: left;
+    }
+    .specs-toggle:hover { color: #60a5fa; }
+    .specs-body { display: none; }
+    .specs-body.open { display: block; }
+    .specs-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .specs-table td {
+      font-size: 11px;
+      padding: 3px 0;
+      vertical-align: top;
+    }
+    .specs-table td:first-child { color: #64748b; width: 45%; text-transform: capitalize; }
+    .specs-table td:last-child  { color: #cbd5e1; }
+
+    /* ── Empty state ── */
+    .empty {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 60px 0;
+      color: #475569;
+    }
+    .empty p { font-size: 15px; margin-top: 8px; }
+
+    /* ── Loading ── */
+    .loading {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 60px 0;
+      color: #475569;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Adoob</div>
+  <nav>
+    <a href="/">Chat Assistant</a>
+    <a href="/products" class="active">Products</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="controls">
+    <h1>Product Catalog</h1>
+    <div class="search-box">
+      <span class="search-icon">&#128269;</span>
+      <input type="text" id="searchInput" placeholder="Search products…" oninput="filterProducts()" />
+    </div>
+    <select id="catFilter" onchange="filterProducts()">
+      <option value="">All Categories</option>
+    </select>
+    <select id="sortBy" onchange="filterProducts()">
+      <option value="id">Sort: Default</option>
+      <option value="price_asc">Price: Low to High</option>
+      <option value="price_desc">Price: High to Low</option>
+      <option value="rating">Top Rated</option>
+      <option value="name">Name A–Z</option>
+    </select>
+    <span id="countLabel"></span>
+  </div>
+
+  <div class="grid" id="grid">
+    <div class="loading">Loading products…</div>
+  </div>
+</div>
+
+<script>
+  let allProducts = [];
+
+  /* ── Category CSS class ── */
+  function catClass(cat) {
+    return 'cat-' + cat.replace(/\s+/g, '');
+  }
+
+  /* ── Stars ── */
+  function stars(rating) {
+    const full  = Math.floor(rating);
+    const half  = rating - full >= 0.5 ? 1 : 0;
+    const empty = 5 - full - half;
+    return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(empty);
+  }
+
+  /* ── Render one card ── */
+  function renderCard(p) {
+    const specRows = Object.entries(p.specs || {}).map(([k, v]) =>
+      `<tr><td>${k.replace(/_/g,' ')}</td><td>${v}</td></tr>`
+    ).join('');
+
+    return `
+      <div class="card" onclick="toggleSpecs(this)">
+        <div class="card-top">
+          <span class="card-id">${p.id}</span>
+          <span class="badge ${catClass(p.category)}">${p.category}</span>
+        </div>
+        <div class="card-name">${esc(p.name)}</div>
+        <div class="card-brand">${esc(p.brand)}</div>
+        <div class="card-desc">${esc(p.description)}</div>
+        ${specRows ? `
+        <button class="specs-toggle" onclick="event.stopPropagation(); toggleSpecs(this.closest('.card'))">
+          Show specs ▼
+        </button>
+        <div class="specs-body">
+          <table class="specs-table"><tbody>${specRows}</tbody></table>
+        </div>` : ''}
+        <div class="card-meta">
+          <span class="price">SAR ${p.price.toLocaleString('en-SA', {minimumFractionDigits:2})}</span>
+          <span class="rating" title="${p.rating}/5">${stars(p.rating)} ${p.rating}</span>
+          <span class="stock">${p.stock} in stock</span>
+        </div>
+      </div>`;
+  }
+
+  function toggleSpecs(card) {
+    const body   = card.querySelector('.specs-body');
+    const btn    = card.querySelector('.specs-toggle');
+    if (!body) return;
+    body.classList.toggle('open');
+    if (btn) btn.textContent = body.classList.contains('open') ? 'Hide specs ▲' : 'Show specs ▼';
+  }
+
+  function esc(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* ── Populate category filter ── */
+  function buildCatFilter(products) {
+    const cats = [...new Set(products.map(p => p.category))].sort();
+    const sel  = document.getElementById('catFilter');
+    cats.forEach(c => {
+      const o = document.createElement('option');
+      o.value = c; o.textContent = c;
+      sel.appendChild(o);
+    });
+  }
+
+  /* ── Filter + sort + render ── */
+  function filterProducts() {
+    const q   = document.getElementById('searchInput').value.toLowerCase().trim();
+    const cat = document.getElementById('catFilter').value;
+    const srt = document.getElementById('sortBy').value;
+
+    let list = allProducts.filter(p => {
+      if (cat && p.category !== cat) return false;
+      if (!q) return true;
+      const haystack = [p.name, p.brand, p.description, p.category, ...(p.tags||[])].join(' ').toLowerCase();
+      return q.split(/\s+/).every(w => haystack.includes(w));
+    });
+
+    if (srt === 'price_asc')  list.sort((a,b) => a.price - b.price);
+    else if (srt === 'price_desc') list.sort((a,b) => b.price - a.price);
+    else if (srt === 'rating') list.sort((a,b) => b.rating - a.rating);
+    else if (srt === 'name')   list.sort((a,b) => a.name.localeCompare(b.name));
+
+    const grid = document.getElementById('grid');
+    document.getElementById('countLabel').textContent = `${list.length} product${list.length!==1?'s':''}`;
+
+    if (!list.length) {
+      grid.innerHTML = `<div class="empty"><div style="font-size:40px">📦</div><p>No products match your search.</p></div>`;
+      return;
+    }
+    grid.innerHTML = list.map(renderCard).join('');
+  }
+
+  /* ── Fetch products from API ── */
+  fetch('/api/products')
+    .then(r => r.json())
+    .then(data => {
+      allProducts = data.products || [];
+      buildCatFilter(allProducts);
+      filterProducts();
+    })
+    .catch(err => {
+      document.getElementById('grid').innerHTML =
+        `<div class="empty"><p>⚠ Failed to load products: ${esc(err.message)}</p></div>`;
+    });
+</script>
+</body>
+</html>
