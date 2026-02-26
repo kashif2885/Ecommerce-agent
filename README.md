@@ -1,6 +1,8 @@
 # Adoob AI Assistant
 
 A conversational AI agent for **Adoob** — an IT & electronics e-commerce store. Built as a technical assessment using LangGraph, FastAPI, ChromaDB, and the OpenAI API.
+![Uploading image.png…]()
+
 
 ---
 
